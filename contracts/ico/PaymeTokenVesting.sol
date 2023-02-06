@@ -2,21 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity 0.8.9;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**********************************************
  * @title PaymeTokenVesting
  *********************************/
-contract PaymeTokenVesting is OwnableUpgradeable, ReentrancyGuardUpgradeable{
-    using SafeMathUpgradeable for uint256;
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+contract PaymeTokenVesting is Ownable, ReentrancyGuard{
+    using SafeMath for uint256;
+    using SafeERC20 for IERC20;
 
     struct VestingSchedule{
 
@@ -46,7 +45,7 @@ contract PaymeTokenVesting is OwnableUpgradeable, ReentrancyGuardUpgradeable{
     }
 
     // address of the ERC20 token
-    IERC20Upgradeable private _token;
+    IERC20 private _token;
     uint256 public tgePercent;
     uint256 public tgeOpeningTime;
 
@@ -90,15 +89,6 @@ contract PaymeTokenVesting is OwnableUpgradeable, ReentrancyGuardUpgradeable{
     }
 
 
-//    constructor(IERC20Upgradeable token_,uint256 TGEPercent_,uint256 TGEOpeningTime_)  {     
-//         require(address(token_) != address(0));
-        
-//         _token = token_;
-
-//         tgeOpeningTime = TGEOpeningTime_;
-//         tgePercent = TGEPercent_;
-
-//     }
 
     /**
      * @dev Creates a vesting contract.
@@ -107,14 +97,12 @@ contract PaymeTokenVesting is OwnableUpgradeable, ReentrancyGuardUpgradeable{
      * @param iTGEOpeningTime time when investor will be elible to claim their token
     */
 
-    function initialize(IERC20Upgradeable iToken,uint256 iTGEPercent,uint256 iTGEOpeningTime) public initializer {
+    constructor(IERC20 iToken,uint256 iTGEPercent,uint256 iTGEOpeningTime) {
         require(address(iToken) != address(0));
         require(iTGEPercent > 0 && iTGEPercent < 100, "TGE Percent must be greater than 0 and Less than 100");
         //require(iTGEOpeningTime >= block.timestamp, "TGE Openning time must be greater than the current time");
 
-        __Ownable_init_unchained();
-        __ReentrancyGuard_init_unchained();
-        
+                
         _token = iToken;
 
         tgeOpeningTime = iTGEOpeningTime;
@@ -314,7 +302,7 @@ contract PaymeTokenVesting is OwnableUpgradeable, ReentrancyGuardUpgradeable{
             vestingSchedule.releaseAtTGE,
             "ReleaseTokenAtTGE: only investors can claim token at TGE"
         );
-
+        
         uint256 currentTime = getCurrentTime();
 
         require(currentTime >= tgeOpeningTime, "TGE: time not reached!");

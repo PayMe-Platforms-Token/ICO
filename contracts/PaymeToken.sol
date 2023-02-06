@@ -13,7 +13,7 @@ contract PaymeToken is ERC20Capped, Ownable, ERC20Pausable {
 
   uint256 constant MAXIMUMSUPPLY = 10000000000000000000000000000;
 
-  constructor() ERC20("PMe", "PMe") ERC20Capped(MAXIMUMSUPPLY) {
+  constructor() ERC20("PayMe Pay token", "PayMe") ERC20Capped(MAXIMUMSUPPLY) {
       _mint(msg.sender, MAXIMUMSUPPLY);
   }
 

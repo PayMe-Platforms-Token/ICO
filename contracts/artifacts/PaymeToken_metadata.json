@@ -534,11 +534,11 @@
 			]
 		},
 		"contracts/PaymeToken.sol": {
-			"keccak256": "0xde64257801153eb506a80f9e45d0a6a4ac74683bb6136257744e5b7b94ec5186",
+			"keccak256": "0x75a72d2392773b90f2630a0e91afe0c51a8b54df92f493b9c5cfdab1a19f4a47",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://33afa39cd872cc2e6f72656b8758ea3489b55ffc1294fa637cc9091c3cbc8ccd",
-				"dweb:/ipfs/Qmecs5sGAnE8M6mb2zKr95o2aHLZ9yEuDysbuDW2rtQFWz"
+				"bzz-raw://3b7eb7813152025277cc2aad67f080ae12ab1f6d85cf2d12d44c3357a493cc76",
+				"dweb:/ipfs/QmQ2auJ5FouvUhx8UVBamZRX86oaJRFSLP5PLYg38VREBJ"
 			]
 		}
 	},
