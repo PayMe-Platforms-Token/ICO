@@ -239,13 +239,15 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
             iReleaseAtTGE
         );
 
-        vestingSchedulesTotalAmount = vestingSchedulesTotalAmount.add(iAmount);
-        
+        uint256 tgeAmount = 0;
         if(iReleaseAtTGE){
             //give out
-            uint256 tgeAmount = iAmount.mul(tgePercent).div(100);
+            tgeAmount = iAmount.mul(tgePercent).div(100);
             tgeTotalAmount = tgeTotalAmount.add(tgeAmount);
         }
+
+        vestingSchedulesTotalAmount = vestingSchedulesTotalAmount.add(iAmount-tgeAmount);
+
   
         vestingSchedulesIds.push(vestingScheduleId);
         uint256 currentVestingCount = holdersVestingCount[iBeneficiary];
@@ -344,7 +346,12 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
         );
 
 
+
+
         uint256 vestedAmount = _computeReleasableAmount(vestingSchedule);
+        if(amount == 0){
+            amount = vestedAmount;
+        }
         require(vestedAmount >= amount, "TokenVesting: cannot release tokens, not enough vested tokens");
         vestingSchedule.released = vestingSchedule.released.add(amount);
         address payable beneficiaryPayable = payable(vestingSchedule.beneficiary);
@@ -464,12 +471,7 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
                 return vestedAmount;
             }
       
-
-
-
-
-
-    }
+ }
 
     function getCurrentTime()
         public

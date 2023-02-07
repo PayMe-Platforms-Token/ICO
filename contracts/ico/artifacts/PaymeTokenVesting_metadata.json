@@ -964,11 +964,11 @@
 			]
 		},
 		"contracts/ico/PaymeTokenVesting.sol": {
-			"keccak256": "0xec06e204303653ab6b60ee0ff855f8c379b431de4ad4ef48e37e697cd4f20033",
+			"keccak256": "0xebffef661ad51877a5cc30e2ec17f7455148c47d5c55bbb5352f4d4fb2880cc0",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://4502cef1c979138877a959990d6346aefa0584fb7d1d65d3cbff95d721734985",
-				"dweb:/ipfs/QmbDPrLKNWVGuemBvzoUvvenuTRXjQP8VBUDeR9orejjH2"
+				"bzz-raw://6176260a6b9d17aad276f3df0122be2a739e311aeeab3558440ec2f0f657c06b",
+				"dweb:/ipfs/Qmavk5UeJb6iwknZ8DEsY5tUznx4ELtPzK3vHQJoYuthFo"
 			]
 		}
 	},

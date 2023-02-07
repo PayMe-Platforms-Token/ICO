@@ -14,8 +14,10 @@ contract MockTokenVesting is PaymeTokenVesting{
 
     uint256 mockTime;
 
-    // constructor(IERC20 token_,uint256 TGEPercent_,uint256 TGEOpeningTime_) PaymeTokenVesting(token_,TGEPercent_,TGEOpeningTime_){
-    // }
+    constructor(IERC20 iToken,uint256 iTGEPercent,uint256 iTGEOpeningTime) 
+    PaymeTokenVesting (iToken, iTGEPercent,iTGEOpeningTime ) {
+      
+    }
 
     function setCurrentTime(uint256 _time)
         external{
