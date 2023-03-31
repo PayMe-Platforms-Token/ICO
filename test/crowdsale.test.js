@@ -84,9 +84,11 @@ describe('Crowdsales ', function(){
       //   TGETIME
       //   );
 
-      vesting = await tokenVesting.deploy(testToken.address);
+      vesting= await tokenVesting.deploy(testToken.address);
 
       await vesting.deployed();
+
+      //Dave test!
 
       //console.log(...crowdsaleArgs)
       openingTime = Math.round(5+ Date.now()/1000);
