@@ -33,8 +33,6 @@ FinalizableCrowdsale, PausableCrowdsale  {
 
    IERC20 public bUSDT;
 
-   uint256 public tokenGenerationEventTime;
-
    uint256 public cliff;
 
    uint256 public duration;
@@ -59,9 +57,21 @@ FinalizableCrowdsale, PausableCrowdsale  {
     // PaymeTokenVesting public techincalDevelopersVesting;
     // PaymeTokenVesting public businessDevelopmentVesting; 
 
-   Investor[] private investors;
+   Investor[] public investors;
 
-   mapping(address => uint256) private _contributions;
+   Builder[] public builders;
+
+   mapping(address => uint256) public _contributions;
+
+   uint256 public builderTotalAmount; 
+
+   event NewBuilderCreated(
+       string  name,
+       address builder,
+       uint256 amount,
+       uint256 duration,
+       uint256 cliff
+    );
 
    struct Investor{
        address investor;
@@ -69,56 +79,76 @@ FinalizableCrowdsale, PausableCrowdsale  {
        bool created;
    }
 
+   struct Builder{
+       string name;
+       address builder;
+       uint256 amount;
+       uint256 duration;
+       uint256 cliff;
+       bool created;
+   }
 
    constructor(
         IERC20 iBUSDT,
-        address iVestingAddress,
         uint256 iRate,    // rate in PayME
         address payable iWallet,
         IERC20 iToken,
         uint256 iCap,
         uint256 iOpeningTime,
         uint256 iClosingTime,
-        uint256 iTGETime,
-        uint256 iDuration
-        
+        uint256 iDuration,
+        uint256 iMinimumAmount,
+        uint256 iMaximumAmount,
+        address iVestingAddress
     )
         Crowdsale(iRate, iWallet, iToken ) 
         CappedCrowdsale(iCap)
         TimedCrowdsale(iOpeningTime, iClosingTime)
         
     {
+        uint256 currentTime = getCurrentTime();
         require(address(iBUSDT) != address(0), "Valid BUSD required");
-        require(iVestingAddress != address(0), "Valid Vesting contract required");
         require(iCap != uint256(0), "Cap must be greater than Zero");
-        require(iOpeningTime >= block.timestamp, "opening time is before current time");
+        require(iOpeningTime >= currentTime, "opening time is before current time");
         require(iClosingTime > iOpeningTime, "opening time is not before closing time");
-        require(iTGETime > iOpeningTime, "Token Generation Event time is not before the closing time");
-        require(iDuration > 15768000, "Duration must be greater than 6months");
+        require(iDuration >= 15768000, "Duration must be greater than 6months");
+        require(iMinimumAmount > uint256(0), "Minimum Sales must be greater than Zero");
+        require(iMaximumAmount > iMinimumAmount, "Maximum Sales must be greater than Minimum Sales");
 
 
 
 
         bUSDT = iBUSDT;
-        tokenGenerationEventTime = iTGETime;
         cliff = 0;
         duration = iDuration;
+        minimumSale = iMinimumAmount;
+        maximumSale = iMaximumAmount;
         vestingAddress = iVestingAddress;
-        minimumSale = 100;
-        maximumSale = 1000;
 
         IERC20  PaymeToken = token();
 
         uint256 totalSupply = PaymeToken.totalSupply();
 
         uint256 ptShare = totalSupply.mul(PROJECT_TEAM_PERCENTAGE).div(100);
-        uint256 tdShare = totalSupply.mul(TECHINCAL_DEVELOPERS_PERCENTAGE).div(100);
-        uint256 bdShare = totalSupply.mul(BUSINESS_DEVELOPERS_PERCENTAGE).div(100);
+        uint256 bdShare = totalSupply.mul(BUSINESS_DEVELOPERS_PERCENTAGE).div(100);        uint256 tdShare = totalSupply.mul(TECHINCAL_DEVELOPERS_PERCENTAGE).div(100);
+
         totalTeamShare = ptShare.add(tdShare).add(bdShare);
-
-        
-
     }
+
+    //TODO: Test this function
+    function setPurchaseToken(IERC20 iToken) public onlyOwner{
+        require(address(iToken) != address(0), "Valid Token Address Required");
+
+        bUSDT = iToken;
+    }
+
+    //TODO: Test this function
+    function setVestingContract(PaymeTokenVesting iVestingAddress) public onlyOwner{
+        require(address(iVestingAddress) != address(0), "Valid Vesting contract required");
+
+        vestingAddress = address(iVestingAddress);
+    }
+    
 
     function buyTokensInBUSD(address beneficiary, uint256 amount) public nonReentrant payable {
         require(address(beneficiary) != address(0), "Valid Beneficiary address is required");
@@ -169,7 +199,7 @@ FinalizableCrowdsale, PausableCrowdsale  {
     view {
         uint256 beneficiaryBalance = bUSDT.balanceOf(msg.sender);
 
-        //Ensure that team owner has funds to create challenge
+        //Ensure that investor owner has funds to invest
         if (weiAmount > beneficiaryBalance) {
           revert InsufficientBalance(beneficiaryBalance, weiAmount);
         }
@@ -223,8 +253,6 @@ FinalizableCrowdsale, PausableCrowdsale  {
         //TODO: Creating Vesting Shedule for others: technical team, director, e.t.c
         IERC20  PaymeToken = token();
 
-
-
         uint256 totalWei =  weiRaised();
         uint256 tokenRate = rate();
 
@@ -248,12 +276,74 @@ FinalizableCrowdsale, PausableCrowdsale  {
         super._finalization();
     }
 
+    //TODO: Test this function
+    //TODO: Test rate
+    //TODO: Team percentage
+    function createBuilder(
+        string memory iName,
+        address iBuilder,
+        uint256 iAmount, 
+        uint256 iDuration,
+        uint256 iCliff
+    ) public onlyOwner {
+
+        //check builders shares
+        require(builderTotalAmount.add(iAmount) > totalTeamShare,"Builder Amount exceeds shares");
+
+        //store builder
+        builders.push(Builder(
+            iName,
+            iBuilder,
+            iAmount,
+            iDuration,
+            iCliff,
+            false
+        ));
+
+        //increase the builder amount
+        builderTotalAmount = builderTotalAmount.add(iAmount);
+
+    }
+
+    //TODO: Create Builders
+    function createBuilders() public {
+       require(hasClosed(), "FinalizableCrowdsale: Not Closed");
+
+
+       PaymeTokenVesting vesting = PaymeTokenVesting(vestingAddress);
+
+      for(uint i = 0; i < builders.length; i++){
+            Builder memory _builder = builders[i];
+
+            if(_builder.created){
+                continue;
+            }
+
+            uint256 currentTime = getCurrentTime();
+            
+            vesting.createVestingSchedule(
+                _builder.builder,
+                currentTime,
+                _builder.cliff,
+               _builder.duration,
+                1,
+                true,
+                _builder.amount,
+                false
+            );
+
+            _builder.created = true;
+        }
+
+    }
+    
+
     function createInvestors() public {
        require(hasClosed(), "FinalizableCrowdsale: not closed");
 
        PaymeTokenVesting vesting = PaymeTokenVesting(vestingAddress);
 
-      for(uint i = 0; i < investors.length; i++){
+       for(uint i = 0; i < investors.length; i++){
             Investor memory _investor = investors[i];
 
             if(_investor.created){
@@ -262,7 +352,7 @@ FinalizableCrowdsale, PausableCrowdsale  {
             
             vesting.createVestingSchedule(
                 _investor.investor,
-                tokenGenerationEventTime,
+                vesting.getTGEOpeningTime(),
                 cliff,
                 duration,
                 1,
@@ -282,16 +372,17 @@ FinalizableCrowdsale, PausableCrowdsale  {
      * work. Calls the contract's finalization function.
      */
     function finalize() override public onlyOwner {
-         super.finalize();
+        //require(address(vestingAddress) != address(0),"Vesting Address is Required");
+        super.finalize();
     }
 
-    // function getCurrentTime()
-    //     internal
-    //     virtual
-    //     view
-    //     returns(uint256){
-    //     return block.timestamp;
-    // }
+    function getCurrentTime()
+        internal
+        virtual
+        view
+        returns(uint256){
+        return block.timestamp;
+    }
 
     
 

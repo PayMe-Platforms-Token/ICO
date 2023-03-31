@@ -19,10 +19,13 @@ describe("PaymeTokenVesting", function () {
   let tgeOpeningTime = Math.round(5+ Date.now()/1000);
 
   const deployVestingToken = async function(TokenVesting){
-    tokenVesting = await upgrades.deployProxy(
-      TokenVesting,
-      [testToken.address, TGEPERCENTAGE,tgeOpeningTime],
-      {initializer: "initialize"});
+    // tokenVesting = await upgrades.deployProxy(
+    //   TokenVesting,
+    //   [testToken.address, TGEPERCENTAGE,tgeOpeningTime],
+    //   {initializer: "initialize"});
+    
+    
+    tokenVesting = await TokenVesting.deploy(testToken.address);
 
      const e = await tokenVesting.deployed();
      return e;
@@ -105,12 +108,14 @@ describe("PaymeTokenVesting", function () {
     it("Should vest tokens gradually", async function () {
       // deploy vesting contruhjhact
       let TGEOT1 = Math.round(5+ Date.now()/1000)+30;
-      const tokenVesting = await upgrades.deployProxy(
-        TokenVesting,
-        [testToken.address, TGEPERCENTAGE,TGEOT1],
-        {initializer: "initialize"});
+      // const tokenVesting = await upgrades.deployProxy(
+      //   TokenVesting,
+      //   [testToken.address, TGEPERCENTAGE,TGEOT1],
+      //   {initializer: "initialize"});
+
+      tokenVesting = await TokenVesting.deploy(testToken.address);
   
-       const e = await tokenVesting.deployed();
+      const e = await tokenVesting.deployed();
       
       //Send Token to Vesting Contract 
       await testToken.transfer(tokenVesting.address, ownerBalance)

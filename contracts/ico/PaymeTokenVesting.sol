@@ -1,6 +1,6 @@
 // ico/contracts/PaymeTokenVesting.sol
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -116,6 +116,13 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
 
     //fallback() external payable {}
 
+    function getTGEOpeningTime()
+    external 
+    view 
+    returns(uint256) {
+        return tgeOpeningTime;
+    }
+
     /**
     * @dev Returns the number of vesting schedules associated to a beneficiary.
     * @return the number of vesting schedules
@@ -180,6 +187,8 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
     }
 
     function setCrowdsaleAddress(address icrowdsalesAddress) external{
+        require(icrowdsalesAddress != address(0x0),"CrowdsaleAddress: Crowdsale Address cannot be null");
+
         crowdsalesAddress = icrowdsalesAddress;
     }
     
@@ -212,6 +221,7 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
         uint256 iSlicePeriodSeconds,
         bool iRevocable,
         uint256 iAmount,
+
         bool iReleaseAtTGE
     )
     onlyCrowdsaleOrOwner public{
@@ -270,7 +280,18 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
         if(vestedAmount > 0){
             release(vestingScheduleId, vestedAmount);
         }
-        uint256 unreleased = vestingSchedule.amountTotal.sub(vestingSchedule.released);
+
+        uint256 vestingAmount = vestingSchedule.amountTotal;
+
+        //Checks:
+        //The investor eligible to claim token at TGE
+        if(vestingSchedule.releaseAtTGE){
+            //give out
+            uint256 tgeAmount = vestingSchedule.amountTotal.mul(tgePercent).div(100);
+            vestingAmount = vestingSchedule.amountTotal.sub(tgeAmount);
+        }
+        
+        uint256 unreleased = vestingAmount.sub(vestingSchedule.released);
         vestingSchedulesTotalAmount = vestingSchedulesTotalAmount.sub(unreleased);
         vestingSchedule.revoked = true;
     }
@@ -344,7 +365,6 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
             isBeneficiary || isOwner,
             "TokenVesting: only beneficiary and owner can release vested tokens"
         );
-
 
 
 
@@ -456,7 +476,7 @@ contract PaymeTokenVesting is Ownable, ReentrancyGuard{
                vestingAmount = vestingSchedule.amountTotal.sub(tgeAmount);
             }
 
-            if ((currentTime < vestingSchedule.cliff) || vestingSchedule.revoked == true) {
+            if ((currentTime < vestingSchedule.cliff) || vestingSchedule.revoked) {
               return 0;
             }else if (currentTime >= vestingSchedule.start.add(vestingSchedule.duration)) { 
                //time has elapsed -> release all 

@@ -34,14 +34,19 @@ export interface MockCrowdsaleInterface extends utils.Interface {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "PROJECT_TEAM_PERCENTAGE()": FunctionFragment;
     "TECHINCAL_DEVELOPERS_PERCENTAGE()": FunctionFragment;
+    "_contributions(address)": FunctionFragment;
     "addWhitelisted(address)": FunctionFragment;
     "bUSDT()": FunctionFragment;
+    "builderTotalAmount()": FunctionFragment;
+    "builders(uint256)": FunctionFragment;
     "buyTokens(address)": FunctionFragment;
     "buyTokensInBUSD(address,uint256)": FunctionFragment;
     "cap()": FunctionFragment;
     "capReached()": FunctionFragment;
     "cliff()": FunctionFragment;
     "closingTime()": FunctionFragment;
+    "createBuilder(string,address,uint256,uint256,uint256)": FunctionFragment;
+    "createBuilders()": FunctionFragment;
     "createInvestors()": FunctionFragment;
     "duration()": FunctionFragment;
     "finalize()": FunctionFragment;
@@ -50,6 +55,7 @@ export interface MockCrowdsaleInterface extends utils.Interface {
     "grantRole(bytes32,address)": FunctionFragment;
     "hasClosed()": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
+    "investors(uint256)": FunctionFragment;
     "isOpen()": FunctionFragment;
     "maximumSale()": FunctionFragment;
     "minimumSale()": FunctionFragment;
@@ -62,9 +68,10 @@ export interface MockCrowdsaleInterface extends utils.Interface {
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "setCurrentTime(uint256)": FunctionFragment;
+    "setPurchaseToken(address)": FunctionFragment;
+    "setVestingContract(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "token()": FunctionFragment;
-    "tokenGenerationEventTime()": FunctionFragment;
     "totalTeamShare()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unpause()": FunctionFragment;
@@ -79,14 +86,19 @@ export interface MockCrowdsaleInterface extends utils.Interface {
       | "DEFAULT_ADMIN_ROLE"
       | "PROJECT_TEAM_PERCENTAGE"
       | "TECHINCAL_DEVELOPERS_PERCENTAGE"
+      | "_contributions"
       | "addWhitelisted"
       | "bUSDT"
+      | "builderTotalAmount"
+      | "builders"
       | "buyTokens"
       | "buyTokensInBUSD"
       | "cap"
       | "capReached"
       | "cliff"
       | "closingTime"
+      | "createBuilder"
+      | "createBuilders"
       | "createInvestors"
       | "duration"
       | "finalize"
@@ -95,6 +107,7 @@ export interface MockCrowdsaleInterface extends utils.Interface {
       | "grantRole"
       | "hasClosed"
       | "hasRole"
+      | "investors"
       | "isOpen"
       | "maximumSale"
       | "minimumSale"
@@ -107,9 +120,10 @@ export interface MockCrowdsaleInterface extends utils.Interface {
       | "renounceRole"
       | "revokeRole"
       | "setCurrentTime"
+      | "setPurchaseToken"
+      | "setVestingContract"
       | "supportsInterface"
       | "token"
-      | "tokenGenerationEventTime"
       | "totalTeamShare"
       | "transferOwnership"
       | "unpause"
@@ -135,10 +149,22 @@ export interface MockCrowdsaleInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "_contributions",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "addWhitelisted",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "bUSDT", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "builderTotalAmount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "builders",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "buyTokens",
     values: [PromiseOrValue<string>]
@@ -155,6 +181,20 @@ export interface MockCrowdsaleInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "cliff", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "closingTime",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createBuilder",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createBuilders",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -176,6 +216,10 @@ export interface MockCrowdsaleInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "hasRole",
     values: [PromiseOrValue<BytesLike>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "investors",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "isOpen", values?: undefined): string;
   encodeFunctionData(
@@ -211,14 +255,18 @@ export interface MockCrowdsaleInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setPurchaseToken",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setVestingContract",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [PromiseOrValue<BytesLike>]
   ): string;
   encodeFunctionData(functionFragment: "token", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "tokenGenerationEventTime",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "totalTeamShare",
     values?: undefined
@@ -252,10 +300,19 @@ export interface MockCrowdsaleInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "_contributions",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "addWhitelisted",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "bUSDT", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "builderTotalAmount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "builders", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "buyTokens", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "buyTokensInBUSD",
@@ -266,6 +323,14 @@ export interface MockCrowdsaleInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "cliff", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "closingTime",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createBuilder",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createBuilders",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -282,6 +347,7 @@ export interface MockCrowdsaleInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasClosed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "investors", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isOpen", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "maximumSale",
@@ -313,14 +379,18 @@ export interface MockCrowdsaleInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setPurchaseToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setVestingContract",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "tokenGenerationEventTime",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "totalTeamShare",
     data: BytesLike
@@ -339,6 +409,7 @@ export interface MockCrowdsaleInterface extends utils.Interface {
 
   events: {
     "CrowdsaleFinalized()": EventFragment;
+    "NewBuilderCreated(string,address,uint256,uint256,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
@@ -350,6 +421,7 @@ export interface MockCrowdsaleInterface extends utils.Interface {
   };
 
   getEvent(nameOrSignatureOrTopic: "CrowdsaleFinalized"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NewBuilderCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
@@ -368,6 +440,21 @@ export type CrowdsaleFinalizedEvent = TypedEvent<
 
 export type CrowdsaleFinalizedEventFilter =
   TypedEventFilter<CrowdsaleFinalizedEvent>;
+
+export interface NewBuilderCreatedEventObject {
+  name: string;
+  builder: string;
+  amount: BigNumber;
+  duration: BigNumber;
+  cliff: BigNumber;
+}
+export type NewBuilderCreatedEvent = TypedEvent<
+  [string, string, BigNumber, BigNumber, BigNumber],
+  NewBuilderCreatedEventObject
+>;
+
+export type NewBuilderCreatedEventFilter =
+  TypedEventFilter<NewBuilderCreatedEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -496,12 +583,33 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    _contributions(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     addWhitelisted(
       account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
     bUSDT(overrides?: CallOverrides): Promise<[string]>;
+
+    builderTotalAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    builders(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, string, BigNumber, BigNumber, BigNumber, boolean] & {
+        name: string;
+        builder: string;
+        amount: BigNumber;
+        duration: BigNumber;
+        cliff: BigNumber;
+        created: boolean;
+      }
+    >;
 
     buyTokens(
       beneficiary: PromiseOrValue<string>,
@@ -521,6 +629,19 @@ export interface MockCrowdsale extends BaseContract {
     cliff(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     closingTime(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    createBuilder(
+      iName: PromiseOrValue<string>,
+      iBuilder: PromiseOrValue<string>,
+      iAmount: PromiseOrValue<BigNumberish>,
+      iDuration: PromiseOrValue<BigNumberish>,
+      iCliff: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    createBuilders(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     createInvestors(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -552,6 +673,17 @@ export interface MockCrowdsale extends BaseContract {
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    investors(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, BigNumber, boolean] & {
+        investor: string;
+        investment: BigNumber;
+        created: boolean;
+      }
+    >;
 
     isOpen(overrides?: CallOverrides): Promise<[boolean]>;
 
@@ -592,14 +724,22 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setPurchaseToken(
+      iToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setVestingContract(
+      iVestingAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     token(overrides?: CallOverrides): Promise<[string]>;
-
-    tokenGenerationEventTime(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     totalTeamShare(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -629,12 +769,33 @@ export interface MockCrowdsale extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  _contributions(
+    arg0: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   addWhitelisted(
     account: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   bUSDT(overrides?: CallOverrides): Promise<string>;
+
+  builderTotalAmount(overrides?: CallOverrides): Promise<BigNumber>;
+
+  builders(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<
+    [string, string, BigNumber, BigNumber, BigNumber, boolean] & {
+      name: string;
+      builder: string;
+      amount: BigNumber;
+      duration: BigNumber;
+      cliff: BigNumber;
+      created: boolean;
+    }
+  >;
 
   buyTokens(
     beneficiary: PromiseOrValue<string>,
@@ -654,6 +815,19 @@ export interface MockCrowdsale extends BaseContract {
   cliff(overrides?: CallOverrides): Promise<BigNumber>;
 
   closingTime(overrides?: CallOverrides): Promise<BigNumber>;
+
+  createBuilder(
+    iName: PromiseOrValue<string>,
+    iBuilder: PromiseOrValue<string>,
+    iAmount: PromiseOrValue<BigNumberish>,
+    iDuration: PromiseOrValue<BigNumberish>,
+    iCliff: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  createBuilders(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   createInvestors(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -685,6 +859,17 @@ export interface MockCrowdsale extends BaseContract {
     account: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  investors(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<
+    [string, BigNumber, boolean] & {
+      investor: string;
+      investment: BigNumber;
+      created: boolean;
+    }
+  >;
 
   isOpen(overrides?: CallOverrides): Promise<boolean>;
 
@@ -725,14 +910,22 @@ export interface MockCrowdsale extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setPurchaseToken(
+    iToken: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setVestingContract(
+    iVestingAddress: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: PromiseOrValue<BytesLike>,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   token(overrides?: CallOverrides): Promise<string>;
-
-  tokenGenerationEventTime(overrides?: CallOverrides): Promise<BigNumber>;
 
   totalTeamShare(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -764,12 +957,33 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    _contributions(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     addWhitelisted(
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
     bUSDT(overrides?: CallOverrides): Promise<string>;
+
+    builderTotalAmount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    builders(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, string, BigNumber, BigNumber, BigNumber, boolean] & {
+        name: string;
+        builder: string;
+        amount: BigNumber;
+        duration: BigNumber;
+        cliff: BigNumber;
+        created: boolean;
+      }
+    >;
 
     buyTokens(
       beneficiary: PromiseOrValue<string>,
@@ -789,6 +1003,17 @@ export interface MockCrowdsale extends BaseContract {
     cliff(overrides?: CallOverrides): Promise<BigNumber>;
 
     closingTime(overrides?: CallOverrides): Promise<BigNumber>;
+
+    createBuilder(
+      iName: PromiseOrValue<string>,
+      iBuilder: PromiseOrValue<string>,
+      iAmount: PromiseOrValue<BigNumberish>,
+      iDuration: PromiseOrValue<BigNumberish>,
+      iCliff: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    createBuilders(overrides?: CallOverrides): Promise<void>;
 
     createInvestors(overrides?: CallOverrides): Promise<void>;
 
@@ -816,6 +1041,17 @@ export interface MockCrowdsale extends BaseContract {
       account: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    investors(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, BigNumber, boolean] & {
+        investor: string;
+        investment: BigNumber;
+        created: boolean;
+      }
+    >;
 
     isOpen(overrides?: CallOverrides): Promise<boolean>;
 
@@ -852,14 +1088,22 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setPurchaseToken(
+      iToken: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setVestingContract(
+      iVestingAddress: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     token(overrides?: CallOverrides): Promise<string>;
-
-    tokenGenerationEventTime(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalTeamShare(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -880,6 +1124,21 @@ export interface MockCrowdsale extends BaseContract {
   filters: {
     "CrowdsaleFinalized()"(): CrowdsaleFinalizedEventFilter;
     CrowdsaleFinalized(): CrowdsaleFinalizedEventFilter;
+
+    "NewBuilderCreated(string,address,uint256,uint256,uint256)"(
+      name?: null,
+      builder?: null,
+      amount?: null,
+      duration?: null,
+      cliff?: null
+    ): NewBuilderCreatedEventFilter;
+    NewBuilderCreated(
+      name?: null,
+      builder?: null,
+      amount?: null,
+      duration?: null,
+      cliff?: null
+    ): NewBuilderCreatedEventFilter;
 
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
@@ -965,12 +1224,24 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    _contributions(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     addWhitelisted(
       account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     bUSDT(overrides?: CallOverrides): Promise<BigNumber>;
+
+    builderTotalAmount(overrides?: CallOverrides): Promise<BigNumber>;
+
+    builders(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     buyTokens(
       beneficiary: PromiseOrValue<string>,
@@ -990,6 +1261,19 @@ export interface MockCrowdsale extends BaseContract {
     cliff(overrides?: CallOverrides): Promise<BigNumber>;
 
     closingTime(overrides?: CallOverrides): Promise<BigNumber>;
+
+    createBuilder(
+      iName: PromiseOrValue<string>,
+      iBuilder: PromiseOrValue<string>,
+      iAmount: PromiseOrValue<BigNumberish>,
+      iDuration: PromiseOrValue<BigNumberish>,
+      iCliff: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    createBuilders(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
 
     createInvestors(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1019,6 +1303,11 @@ export interface MockCrowdsale extends BaseContract {
     hasRole(
       role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    investors(
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1061,14 +1350,22 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setPurchaseToken(
+      iToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setVestingContract(
+      iVestingAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<BigNumber>;
-
-    tokenGenerationEventTime(overrides?: CallOverrides): Promise<BigNumber>;
 
     totalTeamShare(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1105,12 +1402,26 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    _contributions(
+      arg0: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     addWhitelisted(
       account: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     bUSDT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    builderTotalAmount(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    builders(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     buyTokens(
       beneficiary: PromiseOrValue<string>,
@@ -1130,6 +1441,19 @@ export interface MockCrowdsale extends BaseContract {
     cliff(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     closingTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    createBuilder(
+      iName: PromiseOrValue<string>,
+      iBuilder: PromiseOrValue<string>,
+      iAmount: PromiseOrValue<BigNumberish>,
+      iDuration: PromiseOrValue<BigNumberish>,
+      iCliff: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createBuilders(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
 
     createInvestors(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1159,6 +1483,11 @@ export interface MockCrowdsale extends BaseContract {
     hasRole(
       role: PromiseOrValue<BytesLike>,
       account: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    investors(
+      arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1201,16 +1530,22 @@ export interface MockCrowdsale extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    setPurchaseToken(
+      iToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setVestingContract(
+      iVestingAddress: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     supportsInterface(
       interfaceId: PromiseOrValue<BytesLike>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    tokenGenerationEventTime(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     totalTeamShare(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

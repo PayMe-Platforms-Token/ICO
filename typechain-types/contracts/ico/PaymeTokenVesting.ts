@@ -78,6 +78,7 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
     "crowdsalesAddress()": FunctionFragment;
     "getCurrentTime()": FunctionFragment;
     "getLastVestingScheduleForHolder(address)": FunctionFragment;
+    "getTGEOpeningTime()": FunctionFragment;
     "getTgeTotalAmount()": FunctionFragment;
     "getToken()": FunctionFragment;
     "getTotalInvestmentAmountBalance()": FunctionFragment;
@@ -88,7 +89,6 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
     "getVestingSchedulesCountByBeneficiary(address)": FunctionFragment;
     "getVestingSchedulesTotalAmount()": FunctionFragment;
     "getWithdrawableAmount()": FunctionFragment;
-    "initialize(address,uint256,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "release(bytes32,uint256)": FunctionFragment;
     "releaseForTGE(bytes32)": FunctionFragment;
@@ -111,6 +111,7 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
       | "crowdsalesAddress"
       | "getCurrentTime"
       | "getLastVestingScheduleForHolder"
+      | "getTGEOpeningTime"
       | "getTgeTotalAmount"
       | "getToken"
       | "getTotalInvestmentAmountBalance"
@@ -121,7 +122,6 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
       | "getVestingSchedulesCountByBeneficiary"
       | "getVestingSchedulesTotalAmount"
       | "getWithdrawableAmount"
-      | "initialize"
       | "owner"
       | "release"
       | "releaseForTGE"
@@ -173,6 +173,10 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "getTGEOpeningTime",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getTgeTotalAmount",
     values?: undefined
   ): string;
@@ -208,14 +212,6 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getWithdrawableAmount",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "initialize",
-    values: [
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
-    ]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -288,6 +284,10 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getTGEOpeningTime",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getTgeTotalAmount",
     data: BytesLike
   ): Result;
@@ -324,7 +324,6 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
     functionFragment: "getWithdrawableAmount",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "release", data: BytesLike): Result;
   decodeFunctionResult(
@@ -356,7 +355,6 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
 
   events: {
-    "Initialized(uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Released(uint256)": EventFragment;
     "Revoked()": EventFragment;
@@ -364,20 +362,12 @@ export interface PaymeTokenVestingInterface extends utils.Interface {
     "VestingScheduleCreated(bytes32)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "Initialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Released"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Revoked"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TokenReleasedAtTGE"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "VestingScheduleCreated"): EventFragment;
 }
-
-export interface InitializedEventObject {
-  version: number;
-}
-export type InitializedEvent = TypedEvent<[number], InitializedEventObject>;
-
-export type InitializedEventFilter = TypedEventFilter<InitializedEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -490,6 +480,8 @@ export interface PaymeTokenVesting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[PaymeTokenVesting.VestingScheduleStructOutput]>;
 
+    getTGEOpeningTime(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getTgeTotalAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getToken(overrides?: CallOverrides): Promise<[string]>;
@@ -526,13 +518,6 @@ export interface PaymeTokenVesting extends BaseContract {
     ): Promise<[BigNumber]>;
 
     getWithdrawableAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    initialize(
-      iToken: PromiseOrValue<string>,
-      iTGEPercent: PromiseOrValue<BigNumberish>,
-      iTGEOpeningTime: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -618,6 +603,8 @@ export interface PaymeTokenVesting extends BaseContract {
     overrides?: CallOverrides
   ): Promise<PaymeTokenVesting.VestingScheduleStructOutput>;
 
+  getTGEOpeningTime(overrides?: CallOverrides): Promise<BigNumber>;
+
   getTgeTotalAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
   getToken(overrides?: CallOverrides): Promise<string>;
@@ -652,13 +639,6 @@ export interface PaymeTokenVesting extends BaseContract {
   getVestingSchedulesTotalAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
   getWithdrawableAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
-  initialize(
-    iToken: PromiseOrValue<string>,
-    iTGEPercent: PromiseOrValue<BigNumberish>,
-    iTGEOpeningTime: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -744,6 +724,8 @@ export interface PaymeTokenVesting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PaymeTokenVesting.VestingScheduleStructOutput>;
 
+    getTGEOpeningTime(overrides?: CallOverrides): Promise<BigNumber>;
+
     getTgeTotalAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     getToken(overrides?: CallOverrides): Promise<string>;
@@ -780,13 +762,6 @@ export interface PaymeTokenVesting extends BaseContract {
     ): Promise<BigNumber>;
 
     getWithdrawableAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    initialize(
-      iToken: PromiseOrValue<string>,
-      iTGEPercent: PromiseOrValue<BigNumberish>,
-      iTGEOpeningTime: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -834,9 +809,6 @@ export interface PaymeTokenVesting extends BaseContract {
   };
 
   filters: {
-    "Initialized(uint8)"(version?: null): InitializedEventFilter;
-    Initialized(version?: null): InitializedEventFilter;
-
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
@@ -905,6 +877,8 @@ export interface PaymeTokenVesting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getTGEOpeningTime(overrides?: CallOverrides): Promise<BigNumber>;
+
     getTgeTotalAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     getToken(overrides?: CallOverrides): Promise<BigNumber>;
@@ -941,13 +915,6 @@ export interface PaymeTokenVesting extends BaseContract {
     ): Promise<BigNumber>;
 
     getWithdrawableAmount(overrides?: CallOverrides): Promise<BigNumber>;
-
-    initialize(
-      iToken: PromiseOrValue<string>,
-      iTGEPercent: PromiseOrValue<BigNumberish>,
-      iTGEOpeningTime: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1034,6 +1001,8 @@ export interface PaymeTokenVesting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getTGEOpeningTime(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getTgeTotalAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1073,13 +1042,6 @@ export interface PaymeTokenVesting extends BaseContract {
 
     getWithdrawableAmount(
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    initialize(
-      iToken: PromiseOrValue<string>,
-      iTGEPercent: PromiseOrValue<BigNumberish>,
-      iTGEOpeningTime: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity 0.8.9;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "../ico/PaymeTokenVesting.sol";
 
@@ -14,8 +14,12 @@ contract MockTokenVesting is PaymeTokenVesting{
 
     uint256 mockTime;
 
-    constructor(IERC20 iToken,uint256 iTGEPercent,uint256 iTGEOpeningTime) 
-    PaymeTokenVesting (iToken, iTGEPercent,iTGEOpeningTime ) {
+    constructor(IERC20 token) 
+    PaymeTokenVesting (
+        token, //_token,
+        20, //iTGEPercent,
+        block.timestamp+1000 //iTGEOpeningTime
+     ) {
       
     }
 

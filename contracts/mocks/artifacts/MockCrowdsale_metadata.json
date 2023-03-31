@@ -13,11 +13,6 @@
 						"type": "address"
 					},
 					{
-						"internalType": "address",
-						"name": "_vestingAddress",
-						"type": "address"
-					},
-					{
 						"internalType": "uint256",
 						"name": "rate",
 						"type": "uint256"
@@ -49,18 +44,23 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "_TGETime",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_cliff",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
 						"name": "_duration",
 						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_min",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_max",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "_vestingAddress",
+						"type": "address"
 					}
 				],
 				"stateMutability": "nonpayable",
@@ -107,6 +107,17 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "InsufficientTokenForSales",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
@@ -130,6 +141,43 @@
 				"anonymous": false,
 				"inputs": [],
 				"name": "CrowdsaleFinalized",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "builder",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "cliff",
+						"type": "uint256"
+					}
+				],
+				"name": "NewBuilderCreated",
 				"type": "event"
 			},
 			{
@@ -308,12 +356,70 @@
 			},
 			{
 				"inputs": [],
+				"name": "BUSINESS_DEVELOPERS_PERCENTAGE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "DEFAULT_ADMIN_ROLE",
 				"outputs": [
 					{
 						"internalType": "bytes32",
 						"name": "",
 						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "PROJECT_TEAM_PERCENTAGE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "TECHINCAL_DEVELOPERS_PERCENTAGE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "_contributions",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -347,12 +453,56 @@
 			},
 			{
 				"inputs": [],
-				"name": "businessDevelopmentPercentage",
+				"name": "builderTotalAmount",
 				"outputs": [
 					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "builders",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "builder",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "duration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "cliff",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "created",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -439,6 +589,46 @@
 					}
 				],
 				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "iName",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "iBuilder",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "iAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "iDuration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "iCliff",
+						"type": "uint256"
+					}
+				],
+				"name": "createBuilder",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "createBuilders",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -556,6 +746,35 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "investors",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "investor",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "investment",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "created",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "isOpen",
 				"outputs": [
@@ -642,19 +861,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "projectTeamPercentage",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "rate",
 				"outputs": [
 					{
@@ -725,6 +931,32 @@
 			{
 				"inputs": [
 					{
+						"internalType": "contract IERC20",
+						"name": "iToken",
+						"type": "address"
+					}
+				],
+				"name": "setPurchaseToken",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "contract PaymeTokenVesting",
+						"name": "iVestingAddress",
+						"type": "address"
+					}
+				],
+				"name": "setVestingContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes4",
 						"name": "interfaceId",
 						"type": "bytes4"
@@ -736,19 +968,6 @@
 						"internalType": "bool",
 						"name": "",
 						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "techincalDevelopersPercentage",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -769,7 +988,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "tokenGenerationEventTime",
+				"name": "totalTeamShare",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -950,7 +1169,7 @@
 					}
 				}
 			},
-			"title": "MockToken1Vesting WARNING: use only for testing and debugging purpose",
+			"title": "MockTokenVesting WARNING: use only for testing and debugging purpose",
 			"version": 1
 		},
 		"userdoc": {
@@ -977,92 +1196,12 @@
 			"bytecodeHash": "ipfs"
 		},
 		"optimizer": {
-			"enabled": false,
+			"enabled": true,
 			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
-		"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
-			"keccak256": "0x247c62047745915c0af6b955470a72d1696ebad4352d7d3011aef1a2463cd888",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://d7fc8396619de513c96b6e00301b88dd790e83542aab918425633a5f7297a15a",
-				"dweb:/ipfs/QmXbP4kiZyp7guuS7xe8KaybnwkRPGrBc2Kbi3vhcTfpxb"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
-			"keccak256": "0x0203dcadc5737d9ef2c211d6fa15d18ebc3b30dfa51903b64870b01a062b0b4e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://6eb2fd1e9894dbe778f4b8131adecebe570689e63cf892f4e21257bfe1252497",
-				"dweb:/ipfs/QmXgUGNfZvrn6N2miv3nooSs7Jm34A41qz94fu2GtDFcx8"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol": {
-			"keccak256": "0x8cc03c5ac17e8a7396e487cda41fc1f1dfdb91db7d528e6da84bee3b6dd7e167",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://607818f1b44548c2d8268176f73cdb290e1faed971b1061930d92698366e2a11",
-				"dweb:/ipfs/QmQibMe3r5no95b6q7isGT5R75V8xSofWEDLXzp95b7LgZ"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol": {
-			"keccak256": "0x4e733d3164f73f461eaf9d8087a7ad1ea180bdc8ba0d3d61b0e1ae16d8e63dff",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://75b47c3aeca7b66ea6752f8be020ec5c1c502de6ec9065272dae23d3a52196e2",
-				"dweb:/ipfs/QmUebPMHv16tYKFh5BmBQkMfRFb5b8UZ2RgVwdjxCeufVF"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-IERC20PermitUpgradeable.sol": {
-			"keccak256": "0xcc70d8e2281fb3ff69e8ab242500f10142cd0a7fa8dd9e45882be270d4d09024",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://17a4063bc918df0f7bb9cbf04c6f0bb4977afab3f2fc212bc138a178312a221d",
-				"dweb:/ipfs/QmZMdvsHP5mDEAAdrK4bNeNh47TfmSFgN9qEBFTbie7zmm"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol": {
-			"keccak256": "0xf42efac0d704b136c4d85e970562d4dbc1160d726ee93b5133122eb14fe368df",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://e814c30d43cef5501933b775f33a6d6f06cde8aa3b7ce3773cf2256169bb6a1b",
-				"dweb:/ipfs/QmWMqHGc8MHDRgrPrtVyPqsYizr8dJsyFhnmwQV6aQwPKn"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol": {
-			"keccak256": "0x611aa3f23e59cfdd1863c536776407b3e33d695152a266fa7cfb34440a29a8a3",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://9b4b2110b7f2b3eb32951bc08046fa90feccffa594e1176cb91cdfb0e94726b4",
-				"dweb:/ipfs/QmSxLwYjicf9zWFuieRc8WQwE4FisA1Um5jp1iSa731TGt"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
-			"keccak256": "0x963ea7f0b48b032eef72fe3a7582edf78408d6f834115b9feadd673a4d5bd149",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://d6520943ea55fdf5f0bafb39ed909f64de17051bc954ff3e88c9e5621412c79c",
-				"dweb:/ipfs/QmWZ4rAKTQbNG2HxGs46AcTXShsVytKeLs7CUCdCSv5N7a"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/utils/math/MathUpgradeable.sol": {
-			"keccak256": "0x3b39e1a87bb94b9145d91007bbd2c964438e99a659b4accc6ec6df6a1c62589a",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://c983bca009e0c413b39f851ca4728c20c42bcf5359252131d48f612ee5757a70",
-				"dweb:/ipfs/QmP1c7MV6FdzTBYTFdosLNijvGa1dKeaGXy5Ax5UV381GZ"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol": {
-			"keccak256": "0xcaa8b7861115ea691c77ddbeac140a444e0edcd1d9812a43942c0f6b42b36a49",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://9ba2a8d7cd7bdbd42a5c525103da0cd2d190a3f702b7e796bada67f6c613622e",
-				"dweb:/ipfs/QmfZSHW9FxVdWwRAQ171dkhumCPEGfAFMXHPeipPc4M2ag"
-			]
-		},
 		"@openzeppelin/contracts/access/AccessControl.sol": {
 			"keccak256": "0x5b35d8e68aeaccc685239bd9dd79b9ba01a0357930f8a3307ab85511733d9724",
 			"license": "MIT",
@@ -1167,6 +1306,14 @@
 				"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
 			]
 		},
+		"@openzeppelin/contracts/utils/math/Math.sol": {
+			"keccak256": "0xd15c3e400531f00203839159b2b8e7209c5158b35618f570c695b7e47f12e9f0",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b600b852e0597aa69989cc263111f02097e2827edc1bdc70306303e3af5e9929",
+				"dweb:/ipfs/QmU4WfM28A1nDqghuuGeFmN3CnVrk6opWtiF65K4vhFPeC"
+			]
+		},
 		"@openzeppelin/contracts/utils/math/SafeMath.sol": {
 			"keccak256": "0x0f633a0223d9a1dcccfcf38a64c9de0874dfcbfac0c6941ccf074d63a2ce0e1e",
 			"license": "MIT",
@@ -1216,35 +1363,35 @@
 			]
 		},
 		"contracts/crowdsale/validation/WhitelistCrowdsale.sol": {
-			"keccak256": "0x145f3f0eb707efffdc0fd086586293c8863eb31730757376d26fcef356c4cca6",
+			"keccak256": "0x7a80bbc6a6b6e653b0ae75beb5321f2daf9d10c3d34a7ae87ff108d8102d1f10",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://85d7b9083e6e36023307b990a2fdeb350b1d4478dc7e7a8a4b09f3437dc2f3ef",
-				"dweb:/ipfs/QmbhU3ALMT5ouvJPteZrf6vobf3J3bSb1kzLEMQhYXP1ZS"
+				"bzz-raw://47c489d2a2d9f5a807acb0cd64f24a148d9dbd92c8cd49573ee4cba0e5219cf7",
+				"dweb:/ipfs/QmWhPtNHnLGPoyGrbZ14BVdhnwQ7XhS2yw245VZvs4Afyr"
 			]
 		},
 		"contracts/ico/PaymeTokenCrowdsale.sol": {
-			"keccak256": "0x59cb4a98ab0a3f8aad593a17b77d1a169bb5dc3cf1b9e8a4140dde5444b38193",
+			"keccak256": "0x3c114b029df9c2149f331f266a46baea140439f0adb2d06abf6e89785dcf366f",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://0e29ea78955f01b397f6921921e3b1a437084d440c62b9698f25ef524bd15bbe",
-				"dweb:/ipfs/QmbjiEwJf2TXpziNhnaYojxWiSrncaH558nRm1mefB8sTq"
+				"bzz-raw://d3c8a3f4af48b8d894737fdf88f31115b42724ba2b5ae5f8166b3d5c1ca9d58a",
+				"dweb:/ipfs/QmaEQaZKKRwEkQJHLKzLrfMWmSk73pZC6w4pDreYFBuvXm"
 			]
 		},
 		"contracts/ico/PaymeTokenVesting.sol": {
-			"keccak256": "0xab482cbd3332401aa498a2125459b9c52a2ca8db8dfe15f26c3b0e20cd984328",
+			"keccak256": "0x111b43b30cd45d700faa104647b909e47ccbdc275fdc68906f4aa012cee5d27f",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://97ebe72cb36dd3750e3cecfec1f64db5e13c4997151281e6a58ead76d6a4cb62",
-				"dweb:/ipfs/QmaB8uvNenHopomjetMJUj15MxzgZmCKN3pzn6DWYF6EsU"
+				"bzz-raw://b4dab02084eb507ca26688c4bd13330a201d35bcc4dd1b9cde6a996f65259da0",
+				"dweb:/ipfs/QmVnftwFjCu5EKpV87Yn4QkWCAtNqmqrjXGrg3pRUS5CsJ"
 			]
 		},
 		"contracts/mocks/MockCrowdsale.sol": {
-			"keccak256": "0x134e4555f12406fc0053e572c36b87eac6feee3fb5296769c7897457e776ed7a",
+			"keccak256": "0xbd905176c2024d1cd42d4f4fd182569ef316c7995a5e077d8baa80f12a78fde3",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://7f18b4085cb2282917d412e5ddff8907a879b771d15073e72bf813ef57b22c56",
-				"dweb:/ipfs/QmSxMRNzGPMTnPC3TfJFsnRgWnR8jdWArz6mxehzF4sY1Q"
+				"bzz-raw://8783c81990a97ce0481f403293fa9e5b252f747350d1782f1d4de52dd67d0185",
+				"dweb:/ipfs/QmRmj1NS45SFFehJoTPV46QrukprfDEKGhoiQeP9Seo1UA"
 			]
 		}
 	},

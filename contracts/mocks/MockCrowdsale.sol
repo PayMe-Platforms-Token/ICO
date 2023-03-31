@@ -1,8 +1,10 @@
 // contracts/TokenVesting.sol
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
 import "../ico/PaymeTokenCrowdsale.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 
 /**
  * @title MockTokenVesting
@@ -15,43 +17,47 @@ contract MockCrowdsale is PaymeTokenCrowdsale{
 
     constructor(
         IERC20 _BUSDT,
-        address _vestingAddress,
         uint256 rate,    // rate in PayME
         address payable wallet,
         IERC20 _token,
         uint256 _cap,
         uint256 _openingTime,
         uint256 _closingTime,
-        uint256 _TGETime,
-        uint256 _cliff,
-        uint256 _duration
+        uint256 _duration,
+        uint256 _min,
+        uint256 _max,
+        address _vestingAddress
+
     )
 
     PaymeTokenCrowdsale(
         _BUSDT,
-        _vestingAddress,
         rate,    // rate in PayME
         wallet,
         _token,
         _cap,
         _openingTime,
         _closingTime,
-        _TGETime,
-        _duration
+        _duration,
+        _min,
+        _max,
+        _vestingAddress
       ){
     }
+
+
 
     function setCurrentTime(uint256 _time)
         external{
         mockTime = _time;
     }
 
-    // function getCurrentTime()
-    //     internal
-    //     virtual
-    //     override
-    //     view
-    //     returns(uint256){
-    //     return mockTime;
-    // }
+    function getCurrentTime()
+        internal
+        virtual
+        override
+        view
+        returns(uint256){
+        return mockTime;
+    }
 }

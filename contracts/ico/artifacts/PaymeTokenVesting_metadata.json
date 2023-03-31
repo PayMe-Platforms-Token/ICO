@@ -310,6 +310,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "getTGEOpeningTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "getTgeTotalAmount",
 				"outputs": [
 					{
@@ -964,11 +977,11 @@
 			]
 		},
 		"contracts/ico/PaymeTokenVesting.sol": {
-			"keccak256": "0xebffef661ad51877a5cc30e2ec17f7455148c47d5c55bbb5352f4d4fb2880cc0",
+			"keccak256": "0x111b43b30cd45d700faa104647b909e47ccbdc275fdc68906f4aa012cee5d27f",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://6176260a6b9d17aad276f3df0122be2a739e311aeeab3558440ec2f0f657c06b",
-				"dweb:/ipfs/Qmavk5UeJb6iwknZ8DEsY5tUznx4ELtPzK3vHQJoYuthFo"
+				"bzz-raw://b4dab02084eb507ca26688c4bd13330a201d35bcc4dd1b9cde6a996f65259da0",
+				"dweb:/ipfs/QmVnftwFjCu5EKpV87Yn4QkWCAtNqmqrjXGrg3pRUS5CsJ"
 			]
 		}
 	},

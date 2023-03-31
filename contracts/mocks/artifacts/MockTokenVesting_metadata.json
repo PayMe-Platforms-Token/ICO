@@ -6,23 +6,7 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "contract IERC20",
-						"name": "iToken",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "iTGEPercent",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "iTGEOpeningTime",
-						"type": "uint256"
-					}
-				],
+				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -303,6 +287,19 @@
 						"internalType": "struct PaymeTokenVesting.VestingSchedule",
 						"name": "",
 						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTGEOpeningTime",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -978,19 +975,19 @@
 			]
 		},
 		"contracts/ico/PaymeTokenVesting.sol": {
-			"keccak256": "0x2d8363934aa176acbc6a9a63bff4eabae69d1bafd7de874d82e1d6d7615eb051",
+			"keccak256": "0x111b43b30cd45d700faa104647b909e47ccbdc275fdc68906f4aa012cee5d27f",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://75a49f5a1dfc279112777f4b403dafa32cd77efddcbfab77551f56dbb6e63ea3",
-				"dweb:/ipfs/QmbswZmHp24sYwga7LQAH7FFXVtcrkZgyg5vMHUcoJtfX6"
+				"bzz-raw://b4dab02084eb507ca26688c4bd13330a201d35bcc4dd1b9cde6a996f65259da0",
+				"dweb:/ipfs/QmVnftwFjCu5EKpV87Yn4QkWCAtNqmqrjXGrg3pRUS5CsJ"
 			]
 		},
 		"contracts/mocks/MockTokenVesting.sol": {
-			"keccak256": "0x567651c74e2afa948b8e6d4a6c0071c9f8b53af65ac1fb858c3a649b350381f8",
+			"keccak256": "0x9063a1c9439139cd6e7a9a86b0a69844bc810973aacd6efc7b6561316f175097",
 			"license": "Apache-2.0",
 			"urls": [
-				"bzz-raw://3856b3852cd939d2a0ba682850e3e2347642be5767061e0730e090c56d33c918",
-				"dweb:/ipfs/QmRm9dxSecxPAFu2LedMoBG9QoAo5PYeP68UyZ4ei1xRYT"
+				"bzz-raw://2057f78ee39d2a9ee9e9f63117457cd707e3135924ab714a3db61fe0cde5ef4f",
+				"dweb:/ipfs/QmNppypjTg33zRa3p72XnrUg2uWb829nfmCkWoLDNQHusS"
 			]
 		}
 	},

@@ -84,10 +84,7 @@ describe('Crowdsales ', function(){
       //   TGETIME
       //   );
 
-        vesting = await upgrades.deployProxy(
-          tokenVesting,
-          [testToken.address, TGEPERCENTAGE,TGETIME],
-          {initializer: "initialize"});
+      vesting = await tokenVesting.deploy(testToken.address);
 
       await vesting.deployed();
 
@@ -96,17 +93,20 @@ describe('Crowdsales ', function(){
       closingTime = openingTime + 30;
       tgeTime = closingTime + 30
 
+
       crowdsale = await tokenCrowdsale.deploy(
         deployedBUSDToken.address,
-        vesting.address,
         PRESALE_RATE,
         WALLET,
         testToken.address,
         PRESALE_CAP,
         openingTime,
         closingTime,
-        tgeTime,
-        duration
+        duration,
+        100,
+        1000,
+        vesting.address,
+
       );
       await crowdsale.deployed();
 
